@@ -32,4 +32,8 @@
     ```
 
 ## Third-party
+### Libraries
 - [SFML](https://github.com/SFML/SFML)
+### Fonts
+- [googlefonts/roboto](https://github.com/googlefonts/roboto)
+- [TaVaTake/madimi](https://github.com/TaVaTake/madimi)
