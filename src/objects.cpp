@@ -4,8 +4,9 @@
 // Classes methods
 
 // Ball
-Ball::Ball(float radius, sf::Color fillColor)
+Ball::Ball(float radius, float speedToAdd, sf::Color fillColor)
 {
+    Ball::speedToAdd = speedToAdd;
     shape.setRadius(radius);
     shape.setFillColor(fillColor);
 }
@@ -15,6 +16,12 @@ void Ball::reset()
     posX = defPosX;
     posY = defPosY;
     speed = speedDef;
+}
+
+void Ball::increaseSpeed()
+{
+    (speed.first < 0) ? speed.first  -= speedToAdd : speed.first += speedToAdd;
+    (speed.second < 0) ? speed.second -= speedToAdd : speed.second += speedToAdd;
 }
 
 // Paddle

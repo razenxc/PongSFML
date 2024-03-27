@@ -9,27 +9,28 @@
 class Ball
 {
 private:
-    float speedDef   = 1.0f;
-    float defPosX    = 0.0f;
-    float defPosY    = 0.0f;
+    float defPosX    = 0.f;
+    float defPosY    = 0.f;
+    std::pair<float, float> speedDef = std::make_pair(1.f, 1.f);
 public:
-    float speedToAdd = 0.1f;
-    float speed = speedDef;
+    float speedToAdd;
     float posX  = defPosX;
     float posY  = defPosY;
+    std::pair<float, float> speed = speedDef;
 
     sf::CircleShape shape;
 
-    Ball(float radius, sf::Color fillColor);
+    Ball(float radius, float speedToAdd, sf::Color fillColor);
     void reset();
+    void increaseSpeed();
 };
 
 class Paddle
 {
 private:
-    float   speedDef = 0.0f;
-    float   defPosX  = 0.0f;
-    float   defPosY  = 0.0f;
+    float   speedDef = 0.f;
+    float   defPosX  = 0.f;
+    float   defPosY  = 0.f;
 public:
     float speed = speedDef;
     float posX = defPosX;

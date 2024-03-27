@@ -24,18 +24,18 @@ void runInstance()
             bool    colFix          = false;    // because collision condition at start
                                                 // gives true we use this var in condition with operator AN
             bool    debugState      = false;
-            float   paddleHeight    = 100.0f;
+            float   paddleHeight    = 100.f;
     std::pair<bool, bool> col(false, false);    // X, Y; if false - goes down, if true - goes up;
     std::pair<bool, bool> colTouched(false, false); // preventing triple triggering when the ball and paddle collide
 
     // Ball
-    Ball ball(10.0f, sf::Color::White);
+    Ball ball(10.f, 0.2f, sf::Color::White);
 
     // Left paddle
-    Paddle paddleL(10.0f, screen_height / 2 - 10, 4.0f, {10, paddleHeight}, sf::Color::White);
+    Paddle paddleL(10.f, screen_height / 2 - 10, 4.f, {10, paddleHeight}, sf::Color::White);
 
     // Right paddle
-    Paddle paddleR(screen_width - 10 - 10, screen_height / 2 - 10, 4.0f, { 10, paddleHeight }, sf::Color::White);
+    Paddle paddleR(screen_width - 10 - 10, screen_height / 2 - 10, 4.f, { 10, paddleHeight }, sf::Color::White);
 
     // ==========
     // Game loop
@@ -54,36 +54,16 @@ void runInstance()
         // =====================================
         // ------------
         // Ball moving
-        if (col.first == false)
-        {
-            ball.posX += ball.speed;
-        }
-        else
-        {
-            ball.posX -= ball.speed;
-        }
-
-        if (col.second == false)
-        {
-            ball.posY += ball.speed;
-        }
-        else
-        {
-            ball.posY -= ball.speed;
-        }
+        ball.posX += ball.speed.first;
+        ball.posY += ball.speed.second;
 
         // --------------------------------
         // Collision with end of view zone
         
         // Ball collision
-        if (ball.posY >= screen_height - ball.shape.getRadius() * 2)
+        if (ball.posY <= 0 || ball.posY >= screen_height - ball.shape.getRadius() * 2)
         {
-            col.second = true;
-        }
-
-        if (ball.posY <= 0)
-        {
-            col.second = false;
+            ball.speed.second *= -1;
         }
 
         // Paddle collision
@@ -111,28 +91,30 @@ void runInstance()
         // Left paddle
         if (paddleL.shape.getGlobalBounds().intersects(ball.shape.getGlobalBounds()) && colFix)
         {
+            
             if (!colTouched.first)
             {
                 colTouched.first    = true;
                 colTouched.second   = false;
 
                 playerScoreCounter.addScore('L');
-                col.first = false;
-                ball.speed += ball.speedToAdd;
+                ball.speed.first *= -1;
+                ball.increaseSpeed();
             }   
         }
 
         // Right paddle
         if (paddleR.shape.getGlobalBounds().intersects(ball.shape.getGlobalBounds()) && colFix)
         {
+            
             if (!colTouched.second)
             {
                 colTouched.first    = false;
                 colTouched.second   = true;
 
                 playerScoreCounter.addScore('R');
-                col.first = true;
-                ball.speed += ball.speedToAdd;
+                ball.speed.first *= -1;
+                ball.increaseSpeed();
             }
         }
 
@@ -188,7 +170,7 @@ void runInstance()
         {
             Textobj ballInfo(
                 "Ball X: " + std::to_string(ball.posX) + " | Y: " + std::to_string(ball.posY) +
-                " | V: " + std::to_string(ball.speed),
+                " | Vx: " + std::to_string(ball.speed.first) + " | Vy: " + std::to_string(ball.speed.second),
                 fonts.robotoMedium, 20, 10, 10
             );
 
